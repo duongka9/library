@@ -1,0 +1,85 @@
+class Library:
+    def __init__(self, name):
+        self.name = name
+        self.books = {}
+
+    def add_book(self, book):
+        if book.isbn in self.books:
+            print("Book with ISBN", book.isbn, "already exists in the library.")
+        else:
+            self.books[book.isbn] = book
+            print("Book with ISBN", book.isbn, "has been added to the library.")
+
+    def display_books(self):
+        if len(self.books) == 0:
+            print("No books available in the library.")
+        else:
+            print("Available books in the library:")
+            for book in self.books.values():
+                print("Title:", book.title)
+                print("Author:", book.author)
+                print("ISBN:", book.isbn)
+                print("Status:", "Available" if book.available else "Not Available")
+                print("----------------------")
+
+    def lend_book(self, isbn, borrower):
+        if isbn in self.books:
+            book = self.books[isbn]
+            if book.available:
+                book.available = False
+                book.borrower = borrower
+                print("Book with ISBN", isbn, "has been lent to", borrower)
+            else:
+                print("Book with ISBN", isbn, "is not available at the moment.")
+        else:
+            print("Book with ISBN", isbn, "does not exist in the library.")
+
+    def return_book(self, isbn):
+        if isbn in self.books:
+            book = self.books[isbn]
+            if not book.available:
+                book.available = True
+                borrower = book.borrower
+                book.borrower = None
+                print("Book with ISBN", isbn, "has been returned by", borrower)
+            else:
+                print("Book with ISBN", isbn, "is already available in the library.")
+        else:
+            print("Book with ISBN", isbn, "does not exist in the library.")
+
+
+class Book:
+    def __init__(self, title, author, isbn):
+        self.title = title
+        self.author = author
+        self.isbn = isbn
+        self.available = True
+        self.borrower = None
+
+
+# Creating a library object
+my_library = Library("My Library")
+
+# Adding books to the library
+book1 = Book("Book 1", "Author 1", "ISBN1")
+book2 = Book("Book 2", "Author 2", "ISBN2")
+book3 = Book("Book 3", "Author 3", "ISBN3")
+
+my_library.add_book(book1)
+my_library.add_book(book2)
+my_library.add_book(book3)
+
+# Displaying available books
+my_library.display_books()
+
+# Lending a book
+my_library.lend_book("ISBN1", "John")
+
+# Displaying available books after lending
+my_library.display_books()
+
+# Returning a book
+my_library.return_book("ISBN1")
+
+# Displaying available books after returning
+my_library.display_books()
